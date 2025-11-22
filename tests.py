@@ -4,34 +4,34 @@ from main import BooksCollector
 class TestBooksCollector:
 
     # Позитивные проверки метода add_new_book (добавление книги в словарь без жанра):
-    def test_add_new_book_add_one_book_added_one_book(self, collector, books): # Проверка добавления одной новой книги
+    def test_add_new_book_add_one_book_added_one_book(self, collector): # Проверка добавления одной новой книги
         collector.add_new_book('Гарри-Шпроттер')
-        assert len(books) == 1 # ОР: добавлена одна книга
+        assert len(collector.get_books_genre()) == 1 # ОР: добавлена одна книга
 
-    def test_add_new_book_add_two_book_added_two_book(self, collector, books): # Проверка добавления двух новых книг
+    def test_add_new_book_add_two_book_added_two_book(self, collector): # Проверка добавления двух новых книг
         collector.add_new_book('Пуля-Квант')
         collector.add_new_book('Зона поражения')
-        assert len(books) == 2 # ОР: добавлено две книги
+        assert len(collector.get_books_genre()) == 2 # ОР: добавлено две книги
 
     @pytest.mark.parametrize('letters_in', ['Г', 'ЭтаКнигаСостоитИзСорокаСимволовОнаХороша'])        # Проверка добавления одной книги
-    def test_adds_new_book_in_boundary_values_added_one_book(self, collector, letters_in, books):    # с кол-вом символов [1, 40]
+    def test_adds_new_book_in_boundary_values_added_one_book(self, collector, letters_in):    # с кол-вом символов [1, 40]
         collector.add_new_book(letters_in)
-        assert len(books) == 1 # ОР: добавлена одна книга
+        assert len(collector.get_books_genre()) == 1 # ОР: добавлена одна книга
 
-    def test_add_new_book_two_identical_books_added_one_book(self, collector, books): # Проверка добавления двух новых книг с одинаковым названием
+    def test_add_new_book_two_identical_books_added_one_book(self, collector): # Проверка добавления двух новых книг с одинаковым названием
         collector.add_new_book('Мгла')
         collector.add_new_book('Мгла')
-        assert len(books) == 1 # ОР: добавлена одна книга
+        assert len(collector.get_books_genre()) == 1 # ОР: добавлена одна книга
 
-    def test_add_new_book_add_book_without_genre_added_book_without_genre(self, collector, books): # Проверка, что была добавлена книга без жанра
+    def test_add_new_book_add_book_without_genre_added_book_without_genre(self, collector): # Проверка, что была добавлена книга без жанра
         collector.add_new_book('Сомнамбула')
-        assert list(books.values()) == [''] # ОР: добавлена книга без жанра(значения)
+        assert list(collector.get_books_genre().values()) == [''] # ОР: добавлена книга без жанра(значения)
 
     # Негативные проверки метода add_new_book (добавление книги в словарь без жанра):
     @pytest.mark.parametrize('letters_out', ['', 'ЭтаКнигаСостоитИзСорокаОдногоСимволаОнаКл'])        # Проверка добавления одной книги
-    def test_adds_new_book_out_boundary_values_not_added_book(self, collector, letters_out, books):   # с кол-вом символов [0, 41]
+    def test_adds_new_book_out_boundary_values_not_added_book(self, collector, letters_out):   # с кол-вом символов [0, 41]
         collector.add_new_book(letters_out)
-        assert len(books) == 0 # ОР: книга отсутствует в списке добавленных книг
+        assert len(collector.get_books_genre()) == 0 # ОР: книга отсутствует в списке добавленных книг
 
     # Позитивные проверки метода set_book_genre(устанавливаем книге жанр)
     def test_set_book_genre_add_book_name_and_genre_added_book_genre(self, collector): # Проверка добавления жанра добавленной книги
@@ -40,28 +40,28 @@ class TestBooksCollector:
         assert collector.get_book_genre('Звёздный путь') == 'Фантастика' # ОР: добавлен жанр книги
 
     # Негативные проверки метода set_book_genre(устанавливаем книге жанр)
-    def test_set_book_genre_add_book_without_add_new_book_not_added(self, collector, books): # Проверка добавления книги с жанром,
+    def test_set_book_genre_add_book_without_add_new_book_not_added(self, collector): # Проверка добавления книги с жанром,
         collector.set_book_genre('Прятки', 'Детективы')                                      # если не добавили название книги в books_genre
-        assert len(books) == 0 # ОР: жанр книги не добавлен
+        assert len(collector.get_books_genre()) == 0 # ОР: жанр книги не добавлен
 
-    def test_set_book_genre_add_book_without_genre_not_added_genre(self, collector, books): # Проверка добавления книги
+    def test_set_book_genre_add_book_without_genre_not_added_genre(self, collector): # Проверка добавления книги
         collector.add_new_book('ЕГЭ-2026')                                                  # с несуществующим жанром
         collector.set_book_genre('ЕГЭ-2026', 'Обучающие')
-        assert list(books.values()) == [''] # ОР: жанр книги не добавлен
+        assert list(collector.get_books_genre().values()) == [''] # ОР: жанр книги не добавлен
 
-    def test_set_book_genre_add_genre_without_name_genre_not_added(self, collector, books): # Проверка добавления книги с жанром без имени книги
+    def test_set_book_genre_add_genre_without_name_genre_not_added(self, collector): # Проверка добавления книги с жанром без имени книги
         collector.add_new_book('Волшебник Изумрудного города')
         collector.set_book_genre('', 'Мультфильмы')
-        assert list(books.values()) == [''] # ОР: жанр книги не добавлен
+        assert list(collector.get_books_genre().values()) == [''] # ОР: жанр книги не добавлен
 
-    def test_set_book_genre_add_without_genre_not_added_genre(self, collector, books): # Проверка установки жанра с пустым жанром
+    def test_set_book_genre_add_without_genre_not_added_genre(self, collector): # Проверка установки жанра с пустым жанром
         collector.add_new_book('Перекресток Воронов')
         collector.set_book_genre('Перекресток Воронов', '')
-        assert list(books.values()) == [''] # ОР: жанр книги не добавлен
+        assert list(collector.get_books_genre().values()) == [''] # ОР: жанр книги не добавлен
 
     # Проверки метода get_book_genre(получаем жанр книги по её имени)
-    def test_get_books_genre_empty_initial_state(self, collector, books): # Проверка пустого словаря при инициализации
-        assert len(books) == 0 # ОР: возвращается пустой словарь
+    def test_get_books_genre_empty_initial_state(self, collector): # Проверка пустого словаря при инициализации
+        assert len(collector.get_books_genre()) == 0 # ОР: возвращается пустой словарь
 
     def test_get_book_genre_add_book_with_genre_get_genre(self, collector): # Проверка получения жанра по имени
         collector.add_new_book('Во тьме')
@@ -92,10 +92,10 @@ class TestBooksCollector:
         assert len(book_result) == 3 # ОР: выводятся 3 книги с определённым жанром
 
     # Проверки метода get_books_genre(выводит текущий словарь books_genre)
-    def test_add_new_book_name_value_valid_name_book(self, collector, books): # Проверка вывода словаря с книгами
+    def test_add_new_book_name_value_valid_name_book(self, collector): # Проверка вывода словаря с книгами
         name_book = 'Лунь'
         collector.add_new_book(name_book)
-        assert books == {name_book: ''} # ОР: выводится текущий словарь с названием книги
+        assert collector.get_books_genre() == {name_book: ''} # ОР: выводится текущий словарь с названием книги
 
     # Проверки метода get_books_for_children(возвращает книги, которые подходят детям. У жанра книги не должно быть возрастного рейтинга)
     # Позитивные проверки get_books_for_children
