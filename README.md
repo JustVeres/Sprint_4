@@ -18,8 +18,10 @@
 5. [X] **test_set_book_genre_add_without_genre_not_added_genre** — Проверка установки жанра с пустым жанром.
 
 #### get_book_genre:
-1. [X] **test_get_books_genre_empty_initial_state** — Проверка пустого словаря при инициализации.
-2. [X] **test_get_book_genre_add_book_with_genre_get_genre** — Проверка получения жанра по имени.
+1. [X] **test_get_book_genre_add_book_with_genre_get_genre** — Проверка получения жанра по имени.
+2. [X] **test_get_book_genre_existing_book_without_genre** — Проверка получения пустой строки для книги без установленного жанра.
+3. [X] **test_get_book_genre_nonexistent_book** — Проверка получения жанра по имени несуществующей книги.
+4. [X] **test_get_book_genre_empty_string_book_name** — Проверка получения жанра по имени пустого названия книги.
 
 #### get_books_with_specific_genre:
 1. [X] **test_get_books_with_specific_genre_add_name_and_genre_derivation** — Проверка вывода книг по каждому жанру.
@@ -28,7 +30,7 @@
 
 #### get_books_genre:
 1. [X] **test_add_new_book_name_value_valid_name_book** — Проверка вывода словаря с книгами.
-   [X] **** —
+2. [X] **** —
 #### get_books_for_children:
 1. [X] **test_get_books_for_children_with_allowed_genres** — Проверяем, что все книги с подходящими жанрами возвращаются.
 2. [X] **test_get_books_for_children_excludes_age_rated_genres** — Проверяем, что книги с возрастным рейтингом не возвращаются.

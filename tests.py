@@ -2,8 +2,8 @@ import pytest
 from main import BooksCollector
 
 class TestBooksCollector:
-
-    # Позитивные проверки метода add_new_book (добавление книги в словарь без жанра):
+    # Проверки метода add_new_book (добавление книги в словарь без жанра)
+    # Позитивные проверки add_new_book:
     def test_add_new_book_add_one_book_added_one_book(self, collector): # Проверка добавления одной новой книги
         collector.add_new_book('Гарри-Шпроттер')
         assert len(collector.get_books_genre()) == 1 # ОР: добавлена одна книга
@@ -27,19 +27,20 @@ class TestBooksCollector:
         collector.add_new_book('Сомнамбула')
         assert list(collector.get_books_genre().values()) == [''] # ОР: добавлена книга без жанра(значения)
 
-    # Негативные проверки метода add_new_book (добавление книги в словарь без жанра):
+    # Негативные проверки add_new_book:
     @pytest.mark.parametrize('letters_out', ['', 'ЭтаКнигаСостоитИзСорокаОдногоСимволаОнаКл'])        # Проверка добавления одной книги
     def test_adds_new_book_out_boundary_values_not_added_book(self, collector, letters_out):   # с кол-вом символов [0, 41]
         collector.add_new_book(letters_out)
         assert len(collector.get_books_genre()) == 0 # ОР: книга отсутствует в списке добавленных книг
 
-    # Позитивные проверки метода set_book_genre(устанавливаем книге жанр)
+    # Проверки метода set_book_genre(устанавливаем книге жанр)
+    # Позитивные проверки set_book_genre:
     def test_set_book_genre_add_book_name_and_genre_added_book_genre(self, collector): # Проверка добавления жанра добавленной книги
         collector.add_new_book('Звёздный путь')
         collector.set_book_genre('Звёздный путь', 'Фантастика')
         assert collector.get_book_genre('Звёздный путь') == 'Фантастика' # ОР: добавлен жанр книги
 
-    # Негативные проверки метода set_book_genre(устанавливаем книге жанр)
+    # Негативные проверки set_book_genre
     def test_set_book_genre_add_book_without_add_new_book_not_added(self, collector): # Проверка добавления книги с жанром,
         collector.set_book_genre('Прятки', 'Детективы')                                      # если не добавили название книги в books_genre
         assert len(collector.get_books_genre()) == 0 # ОР: жанр книги не добавлен
@@ -60,13 +61,25 @@ class TestBooksCollector:
         assert list(collector.get_books_genre().values()) == [''] # ОР: жанр книги не добавлен
 
     # Проверки метода get_book_genre(получаем жанр книги по её имени)
-    def test_get_books_genre_empty_initial_state(self, collector): # Проверка пустого словаря при инициализации
-        assert len(collector.get_books_genre()) == 0 # ОР: возвращается пустой словарь
-
+    # позитивные проверки get_book_genre
     def test_get_book_genre_add_book_with_genre_get_genre(self, collector): # Проверка получения жанра по имени
-        collector.add_new_book('Во тьме')
-        collector.set_book_genre('Во тьме', 'Ужасы')
-        assert collector.get_book_genre('Во тьме') == 'Ужасы' # ОР: получен жанр соответсвующий названию книги
+        book_name = 'Во тьме'
+        genre = 'Ужасы'
+        collector.add_new_book(book_name)
+        collector.set_book_genre(book_name, genre)
+        assert collector.get_book_genre(book_name) == genre # ОР: получен жанр соответсвующий названию книги
+
+    # негативные проверки get_book_genre
+    def test_get_book_genre_existing_book_without_genre(self, collector): # Проверка получения пустой строки для книги без установленного жанра
+        book_name = 'Ворон'
+        collector.add_new_book(book_name)
+        assert collector.get_book_genre(book_name) == ''  # ОР: выводится пустая строка
+
+    def test_get_book_genre_nonexistent_book(self, collector): # Проверка получения жанра по имени несуществующей книги
+        assert collector.get_book_genre('Несуществующая книга') is None # ОР: Возвращается None для несуществующей книги
+
+    def test_get_book_genre_empty_string_book_name(self, collector): # Проверка получения жанра по имени пустого названия книги
+        assert collector.get_book_genre('') is None # ОР: Возвращается None для пустой книги
 
     # Проверки метода get_books_with_specific_genre(выводим список книг с определённым жанром)
     # позитивные проверки get_books_with_specific_genre:
