@@ -105,10 +105,37 @@ class TestBooksCollector:
         assert len(book_result) == 3 # ОР: выводятся 3 книги с определённым жанром
 
     # Проверки метода get_books_genre(выводит текущий словарь books_genre)
-    def test_add_new_book_name_value_valid_name_book(self, collector): # Проверка вывода словаря с книгами
+    def test_get_books_genre_empty_initial_state(self, collector): # Проверка пустого словаря при инициализации
+        result_genre = collector.get_books_genre()
+        assert len(result_genre) == 0 and result_genre == {} # ОР: возвращается пустой словарь
+
+    def test_add_new_book_name_value_valid_name_book(self, collector): # Проверка вывода словаря с книгой
         name_book = 'Лунь'
         collector.add_new_book(name_book)
         assert collector.get_books_genre() == {name_book: ''} # ОР: выводится текущий словарь с названием книги
+
+    def test_get_books_genre_after_adding_books(self, collector): # Проверка вывода словаря с добавленными книгами
+        books = ['Книга1', 'Книга2', 'Книга3']
+        for book in books:
+            collector.add_new_book(book)
+
+        result = collector.get_books_genre()
+        for book in books:
+            assert book in result and result[book] == '' # ОР: книги добавлены
+
+    def test_get_books_genre_after_setting_genres(self, collector): # Проверка вывода словаря с установленными жанрами
+        test_data = [
+            ('Книга1', 'Фантастика'),
+            ('Книга2', 'Ужасы'),
+            ('Книга3', 'Детективы')]
+
+        for book_name, genre in test_data:
+            collector.add_new_book(book_name)
+            collector.set_book_genre(book_name, genre)
+
+        result = collector.get_books_genre()
+        for book_name, expected_genre in test_data:
+            assert result[book_name] == expected_genre # ОР: возвращается словарь с установленными жанрами
 
     # Проверки метода get_books_for_children(возвращает книги, которые подходят детям. У жанра книги не должно быть возрастного рейтинга)
     # Позитивные проверки get_books_for_children

@@ -29,8 +29,11 @@
 3. [X] **test_get_books_with_specific_genre_multiple_books_same_genre_added_three_books** — Проверка вывода нескольких книг с определённым жанром.
 
 #### get_books_genre:
-1. [X] **test_add_new_book_name_value_valid_name_book** — Проверка вывода словаря с книгами.
-2. [X] **** —
+1. [X] **test_get_books_genre_empty_initial_state** — Проверка пустого словаря при инициализации.
+2. [X] **test_add_new_book_name_value_valid_name_book** — Проверка вывода словаря с книгой.
+3. [X] **test_get_books_genre_after_adding_books** — Проверка вывода словаря с добавленными книгами.
+4. [X] **test_get_books_genre_after_setting_genres** — Проверка вывода словаря с установленными жанрами.
+
 #### get_books_for_children:
 1. [X] **test_get_books_for_children_with_allowed_genres** — Проверяем, что все книги с подходящими жанрами возвращаются.
 2. [X] **test_get_books_for_children_excludes_age_rated_genres** — Проверяем, что книги с возрастным рейтингом не возвращаются.
