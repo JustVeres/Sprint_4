@@ -1,5 +1,4 @@
 import pytest
-from main import BooksCollector
 
 class TestBooksCollector:
     # Проверки метода add_new_book (добавление книги в словарь без жанра)
@@ -83,12 +82,23 @@ class TestBooksCollector:
 
     # Проверки метода get_books_with_specific_genre(выводим список книг с определённым жанром)
     # позитивные проверки get_books_with_specific_genre:
-    @pytest.mark.parametrize('genre_name', BooksCollector().genre)
-    def test_get_books_with_specific_genre_add_name_and_genre_derivation(self, collector, genre_name): # Проверка вывода книг по каждому жанру
-        book_name = 'Универсальная книга'
-        collector.add_new_book(book_name)
-        collector.set_book_genre(book_name, genre_name)
-        assert collector.get_books_with_specific_genre(genre_name) == [book_name] # ОР: название книги выводится по текущему жанру
+    def test_get_books_with_specific_genre_add_name_and_genre_derivation(self, collector): # Проверка вывода книг по каждому жанру
+        test_books = [
+            ('Книга1', 'Фантастика'),
+            ('Книга2', 'Ужасы'),
+            ('Книга3', 'Детективы'),
+            ('Книга4', 'Мультфильмы'),
+            ('Книга5', 'Комедии')]
+
+        for book_name, genre in test_books:
+            collector.add_new_book(book_name)
+            collector.set_book_genre(book_name, genre)
+
+        assert collector.get_books_with_specific_genre('Фантастика') == ['Книга1'] # ОР: выводится книга соответсвующая жанру
+        assert collector.get_books_with_specific_genre('Ужасы') == ['Книга2']
+        assert collector.get_books_with_specific_genre('Детективы') == ['Книга3']
+        assert collector.get_books_with_specific_genre('Мультфильмы') == ['Книга4']
+        assert collector.get_books_with_specific_genre('Комедии') == ['Книга5']
 
     # негативные проверки get_books_with_specific_genre:
     def test_get_books_with_specific_genre_nonexistent_name_not_added(self, collector): # Проверка вывода книг с несуществующим жанром
